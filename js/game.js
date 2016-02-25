@@ -9,6 +9,7 @@ var fieldWidth = 400,
 // game object variables
 var ball, paddle1, paddle2;
 var ballDirX = 1, ballDirY = 1, ballSpeed = 2;
+var paddle1DirY = 0, paddle2DirY = 0, paddleSpeed = 3;
 
 
 function setup() {
@@ -129,6 +130,8 @@ function draw() {
     requestAnimationFrame(draw);
     
     ballPhysics();
+    playerPaddleMovement();
+    
     camera.position.x = paddle1.position.x - 100;
     camera.position.z = paddle1.position.z + 100;
     camera.rotation.z = -90 * Math.PI/180;
@@ -149,6 +152,39 @@ function ballPhysics() {
     //update ball position over time
     ball.position.x += ballDirX * ballSpeed;
     ball.position.y += ballDirY * ballSpeed;
+}
+
+function playerPaddleMovement() {
+    // move left
+    if (Key.isDown(Key.A)) {
+        // if paddle is not touching the side of table we move
+        if (paddle1.position.y < fieldHeight * 0.45) {
+            paddle1DirY = paddleSpeed * 0.5;
+        }
+        // else we don't move and stretch the paddle to indicate we can't move
+        else {
+            paddle1DirY = 0;
+            paddle1.scale.z += (10 - paddle1.scale.z) * 0.2;
+        }
+    }
+    // move right
+    else if (Key.isDown(Key.D)) {
+        if (paddle1.position.y > -fieldHeight * 0.45) {
+            paddle1DirY = -paddleSpeed * 0.5;
+        }
+        else {
+            paddle1DirY = 0;
+            paddle1.scale.z += (10 - paddle1.scale.z) * 0.2;
+        }
+    }
+    // else don't move
+    else {
+        paddle1DirY = 0;
+    }
+    
+    paddle1.scale.y += (1 - paddle1.scale.y) * 0.2;
+    paddle1.scale.z += (1 - paddle1.scale.z) * 0.2;
+    paddle1.position.y += paddle1DirY;
 }
 
 function create_sphere(radius, segments, rings) {

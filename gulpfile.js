@@ -10,8 +10,9 @@ var plugins = require('gulp-load-plugins')({
 * Start server and watch for file changes
 *********************************************/
 gulp.task('default', ['connect:dev'], function () {
+    gulp.watch('./js/*.js', ['reload']);
 	gulp.watch('./index.html', ['reload']);
-	gulp.watch('/css/main.css', ['reload']);
+	gulp.watch('./css/style.css', ['reload']);
 });
 
 
